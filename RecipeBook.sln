@@ -3,6 +3,27 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "db", "db", "{A80485C3-1355-4C95-8743-595C72A6E534}"
+	ProjectSection(SolutionItems) = preProject
+		db\mongo-init.sh = db\mongo-init.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2F81DFDB-BCEE-4E16-BE54-F87ACACE487B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E557548A-2297-4DA9-9FB7-09DC487BD0A8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotfiles", "dotfiles", "{45DA3B8B-BDE5-48AA-BAF1-58C2A8F99F13}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.env = .env
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		docker-compose.yml = docker-compose.yml
+		global.json = global.json
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -10,5 +31,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4681D4D0-E01B-434A-A043-4CFBDE59D048}
 	EndGlobalSection
 EndGlobal
