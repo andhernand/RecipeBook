@@ -1,5 +1,9 @@
 ﻿name: recipe-book-db
 
+networks:
+  mongo-network:
+    driver: bridge
+
 services:
   mongodb:
     container_name: mongodb
@@ -16,6 +20,10 @@ services:
       - 27017:27017
     volumes:
       - ./db/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+      - ./db/mongo/db:/data/db:rw
+      - ./db/mongo/config:/data/configdb:rw
+    networks:
+      - mongo-network
 
   mongo-express:
     container_name: mongo-express
@@ -32,3 +40,5 @@ services:
       - mongodb
     ports:
       - 8881:8081
+    networks:
+      - mongo-network
