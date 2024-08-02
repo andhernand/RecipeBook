@@ -29,6 +29,8 @@ RECIPE_BOOK_API_DATABASE=""
 RECIPE_BOOK_API_COLLECTION=""
 ```
 
+The environment variables that start with `RECIPE_BOOK_API` need to match the values in the [appsettings.json](src/RecipeBook.ApiService/appsettings.json) file.
+
 ### Start MongoDB Server with Docker
 
 Make sure Docker Desktop is running, then execute the following command to start the MongoDb server container:
@@ -42,15 +44,7 @@ docker-compose up -d
 ```bash
 dotnet restore RecipeBook.sln
 dotnet build RecipeBook.sln --no-restore
-dotnet run --project src/RecipeBook.Api/RecipeBook.Api.csproj
-```
-
-### Integration Testing
-
-Integration tests utilize [Testcontainers](https://dotnet.testcontainers.org/) to create a MongoDD database for all integration tests. To run the tests, use the following command:
-
-```bash
-dotnet test RecipeBook.sln
+dotnet run --project src/RecipeBook.AppHost/RecipeBook.AppHost.csproj
 ```
 
 ## Contributing
