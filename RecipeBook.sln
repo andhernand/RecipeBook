@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotfiles", "dotfiles", "{45
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeBook.AppHost", "src\RecipeBook.AppHost\RecipeBook.AppHost.csproj", "{96354DF6-947C-469B-A670-CD31626BE39D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeBook.AppHost", "src\RecipeBook.AppHost\RecipeBook.AppHost.csproj", "{96354DF6-947C-469B-A670-CD31626BE39D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeBook.ServiceDefaults", "src\RecipeBook.ServiceDefaults\RecipeBook.ServiceDefaults.csproj", "{454BF023-A4CA-4B1A-8D4F-37972B87EE20}"
 EndProject

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspire.MongoDB.Driver" Version="8.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\RecipeBook.ServiceDefaults\RecipeBook.ServiceDefaults.csproj" />
   </ItemGroup>
 
