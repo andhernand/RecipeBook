@@ -15,12 +15,12 @@ public class RequestValidationFilter<T> : IEndpointFilter
 
     public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
-        var recipe = context.Arguments.OfType<T>().First();
-        var result = await _validator.ValidateAsync(recipe, context.HttpContext.RequestAborted);
+        var request = context.Arguments.OfType<T>().First();
+        var result = await _validator.ValidateAsync(request, context.HttpContext.RequestAborted);
         if (!result.IsValid)
         {
             var problems = TypedResults.ValidationProblem(result.ToDictionary());
-            _logger.LogWarning("The Recipe has the following {@Problems}", problems);
+            _logger.LogWarning("The {Request} had the following {@Problems}", typeof(T).Name, problems);
             return problems;
         }
 
