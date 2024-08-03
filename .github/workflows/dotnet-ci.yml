@@ -1,0 +1,43 @@
+name: Recipe Book
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    name: .NET CI
+    runs-on: ubuntu-latest
+
+    env:
+      MONGODB_INITDB_ROOT_USERNAME: ${{ secrets.MONGODB_INITDB_ROOT_USERNAME }}
+      MONGODB_INITDB_ROOT_PASSWORD: ${{ secrets.MONGODB_INITDB_ROOT_PASSWORD }}
+      RECIPE_BOOK_API_USER: ${{ secrets.RECIPE_BOOK_API_USER }}
+      RECIPE_BOOK_API_PWD: ${{ secrets.RECIPE_BOOK_API_PWD }}
+      RECIPE_BOOK_API_DATABASE: ${{ secrets.RECIPE_BOOK_API_DATABASE }}
+      RECIPE_BOOK_API_COLLECTION: ${{ secrets.RECIPE_BOOK_API_COLLECTION }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.7
+
+      - name: Cache .NET packages
+        uses: actions/cache@v4.0.2
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-NuGet-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-NuGet-
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4.0.1
+        with:
+          dotnet-version: '8.x'
+
+      - name: Restore dependencies
+        run: dotnet restore RecipeBook.sln
+
+      - name: Build the application
+        run: dotnet build RecipeBook.sln --configuration Release --no-restore
