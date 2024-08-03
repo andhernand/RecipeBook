@@ -2,9 +2,9 @@
 
 namespace RecipeBook.ApiService.Options;
 
-public class RecipeBookDatabaseOptions
+public class DatabaseOptions
 {
-    public const string Key = "RecipeBookDatabaseOptions";
+    public const string Key = "DatabaseOptions";
     [Required] public string DatabaseName { get; set; } = default!;
     [Required] public string CollectionName { get; set; } = default!;
     [Required] public string Username { get; set; } = default!;

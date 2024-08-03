@@ -1,8 +1,12 @@
 ﻿using System.Diagnostics;
 
+using FluentValidation;
+
 using MongoDB.Driver;
 
 using RecipeBook.ApiService.Options;
+using RecipeBook.ApiService.Repositories;
+using RecipeBook.ApiService.Services;
 
 namespace RecipeBook.ApiService;
 
@@ -12,8 +16,8 @@ public static class Extensions
     {
         builder.AddMongoDBClient("DefaultMongoDb", configureClientSettings: x =>
         {
-            var dbOptions = new RecipeBookDatabaseOptions();
-            builder.Configuration.GetSection(RecipeBookDatabaseOptions.Key).Bind(dbOptions);
+            var dbOptions = new DatabaseOptions();
+            builder.Configuration.GetSection(DatabaseOptions.Key).Bind(dbOptions);
 
             x.ApplicationName = "recipe-book-api";
             x.Credential = MongoCredential.CreateCredential(
@@ -22,8 +26,8 @@ public static class Extensions
                 dbOptions.Password);
         });
 
-        builder.Services.AddOptions<RecipeBookDatabaseOptions>()
-            .BindConfiguration(RecipeBookDatabaseOptions.Key)
+        builder.Services.AddOptions<DatabaseOptions>()
+            .BindConfiguration(DatabaseOptions.Key)
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
@@ -38,6 +42,10 @@ public static class Extensions
                 }
             };
         });
+
+        builder.Services.AddSingleton<IRecipeService, RecipeService>();
+        builder.Services.AddSingleton<IRecipeRepository, RecipeRepository>();
+        builder.Services.AddValidatorsFromAssemblyContaining<IRecipeBookApiServiceMarker>(ServiceLifetime.Singleton);
 
         return builder;
     }
