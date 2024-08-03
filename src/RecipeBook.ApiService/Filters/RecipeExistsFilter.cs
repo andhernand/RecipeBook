@@ -15,12 +15,12 @@ public class RecipeExistsFilter : IEndpointFilter
 
     public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
-        var objectId = context.Arguments.OfType<string>().First();
-        var exists = await _repository.ExistsById(objectId, context.HttpContext.RequestAborted);
+        var recipeId = context.Arguments.OfType<string>().First();
+        var exists = await _repository.ExistsById(recipeId, context.HttpContext.RequestAborted);
         if (!exists)
         {
             var problem = Results.Problem(statusCode: StatusCodes.Status404NotFound);
-            _logger.LogWarning("The {ObjectId} had the following {@Problem}", objectId, problem);
+            _logger.LogWarning("A Recipe with {RecipeId} does not exist in the system", recipeId);
             return problem;
         }
 

@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-using FluentValidation;
+﻿using FluentValidation;
 
 using MongoDB.Driver;
 
@@ -34,18 +32,7 @@ public static class Extensions
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        builder.Services.AddProblemDetails(x =>
-        {
-            x.CustomizeProblemDetails = context =>
-            {
-                if (!context.ProblemDetails.Extensions.ContainsKey("traceId"))
-                {
-                    context.ProblemDetails.Extensions["traceId"] =
-                        Activity.Current?.Id ?? context.HttpContext.TraceIdentifier;
-                }
-            };
-        });
-
+        builder.Services.AddProblemDetails();
         builder.Services.AddSingleton<IRecipeService, RecipeService>();
         builder.Services.AddSingleton<IRecipeRepository, RecipeRepository>();
         builder.Services.AddValidatorsFromAssemblyContaining<IRecipeBookApiServiceMarker>(ServiceLifetime.Singleton);
