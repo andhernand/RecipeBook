@@ -10,7 +10,6 @@ public interface IRecipeService
     Task<Recipe?> GetRecipeByIdAsync(string id, CancellationToken token);
     Task<Recipe?> UpdateRecipeAsync(string id, Recipe update, CancellationToken token);
     Task<Recipe?> DeleteRecipeAsync(string id, CancellationToken token);
-    Task<bool> ExistsById(string id, CancellationToken token);
 }
 
 public class RecipeService : IRecipeService
@@ -45,10 +44,5 @@ public class RecipeService : IRecipeService
     public Task<Recipe?> DeleteRecipeAsync(string id, CancellationToken token)
     {
         return _repository.DeleteRecipeAsync(id, token);
-    }
-
-    public Task<bool> ExistsById(string id, CancellationToken token)
-    {
-        return _repository.ExistsById(id, token);
     }
 }
