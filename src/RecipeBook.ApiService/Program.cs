@@ -21,6 +21,9 @@ builder.Services.AddProblemDetails(x =>
     };
 });
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddOptions<RecipeBookDatabaseOptions>()
     .BindConfiguration(RecipeBookDatabaseOptions.Key)
     .ValidateDataAnnotations()
@@ -39,6 +42,12 @@ builder.AddMongoDBClient("DefaultMongoDb", configureClientSettings: x =>
 });
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseExceptionHandler();
 app.MapDefaultEndpoints();
