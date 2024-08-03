@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="Aspire.MongoDB.Driver" Version="8.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.7" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,3 +18,4 @@
   </ItemGroup>
 
 </Project>
+    
