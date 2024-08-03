@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RecipeBook.Contracts\RecipeBook.Contracts.csproj" />
     <ProjectReference Include="..\RecipeBook.ServiceDefaults\RecipeBook.ServiceDefaults.csproj" />
   </ItemGroup>
 
