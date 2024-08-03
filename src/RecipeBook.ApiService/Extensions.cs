@@ -9,6 +9,8 @@ using RecipeBook.ApiService.Options;
 using RecipeBook.ApiService.Repositories;
 using RecipeBook.ApiService.Services;
 
+using Serilog;
+
 namespace RecipeBook.ApiService;
 
 public static class Extensions
@@ -47,6 +49,7 @@ public static class Extensions
         builder.Services.AddSingleton<IRecipeService, RecipeService>();
         builder.Services.AddSingleton<IRecipeRepository, RecipeRepository>();
         builder.Services.AddValidatorsFromAssemblyContaining<IRecipeBookApiServiceMarker>(ServiceLifetime.Singleton);
+        builder.Services.AddSerilog();
 
         return builder;
     }
