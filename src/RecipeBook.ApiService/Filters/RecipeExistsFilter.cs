@@ -19,8 +19,8 @@ public class RecipeExistsFilter : IEndpointFilter
         var exists = await _repository.ExistsById(objectId, context.HttpContext.RequestAborted);
         if (!exists)
         {
-            var problem = TypedResults.Problem(statusCode: StatusCodes.Status404NotFound);
-            _logger.LogWarning("{ObjectId} had the following {@ProblemDetails}", objectId, problem);
+            var problem = Results.Problem(statusCode: StatusCodes.Status404NotFound);
+            _logger.LogWarning("The {ObjectId} had the following {@Problem}", objectId, problem);
             return problem;
         }
 
