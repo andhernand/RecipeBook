@@ -20,6 +20,7 @@ var app = builder.Build();
 
     app.UseGlobalErrorHandling();
     app.MapDefaultEndpoints();
+    app.MapApiEndpoints();
 }
 
 app.Run();

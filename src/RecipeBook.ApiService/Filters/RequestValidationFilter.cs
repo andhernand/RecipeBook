@@ -20,7 +20,7 @@ public class RequestValidationFilter<T> : IEndpointFilter
         if (!result.IsValid)
         {
             var problems = TypedResults.ValidationProblem(result.ToDictionary());
-            _logger.LogWarning("The Recipe has the following {@ValidationProblem}", problems);
+            _logger.LogWarning("The Recipe has the following {@Problems}", problems);
             return problems;
         }
 

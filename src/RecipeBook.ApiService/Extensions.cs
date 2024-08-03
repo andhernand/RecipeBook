@@ -4,6 +4,7 @@ using FluentValidation;
 
 using MongoDB.Driver;
 
+using RecipeBook.ApiService.Endpoints.Recipes;
 using RecipeBook.ApiService.Options;
 using RecipeBook.ApiService.Repositories;
 using RecipeBook.ApiService.Services;
@@ -55,5 +56,16 @@ public static class Extensions
         app.UseExceptionHandler();
 
         return app;
+    }
+
+    public static IEndpointRouteBuilder MapApiEndpoints(this IEndpointRouteBuilder builder)
+    {
+        builder.MapCreateRecipe();
+        builder.MapGetAllRecipes();
+        builder.MapGetRecipeById();
+        builder.MapUpdateRecipe();
+        builder.MapDeleteRecipe();
+
+        return builder;
     }
 }

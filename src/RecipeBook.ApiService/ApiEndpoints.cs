@@ -1,6 +1,6 @@
 ﻿namespace RecipeBook.ApiService;
 
-public class ApiEndpointConstants
+public class ApiEndpoints
 {
     private const string ApiBase = "api";
 
