@@ -76,9 +76,6 @@ public class RecipeBookApiFactory : WebApplicationFactory<IRecipeBookApiServiceM
             config.AddInMemoryCollection(new KeyValuePair<string, string?>[]
             {
                 new($"ConnectionStrings:{_mongo.Resource.Name}", _mongoConnectionString),
-                new("OTEL_EXPORTER_OTLP_ENDPOINT", string.Empty),
-                new("OTEL_EXPORTER_OTLP_HEADERS", "x-otlp-api-key=ede25b98bc12a2d2e879747153b8f9cc"),
-                new("OTEL_EXPORTER_OTLP_PROTOCOL", "grpc"),
                 new("DatabaseOptions:DatabaseName", ApiDatabase),
                 new("DatabaseOptions:CollectionName", ApiCollection),
                 new("DatabaseOptions:Username", ApiUsername),
