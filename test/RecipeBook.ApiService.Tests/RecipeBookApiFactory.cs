@@ -19,6 +19,7 @@ public class RecipeBookApiFactory : WebApplicationFactory<IRecipeBookApiServiceM
 
     private readonly IHost _app;
     private readonly IResourceBuilder<MongoDBServerResource> _mongo;
+    private readonly ResourceNotificationService _resourceNotificationService;
 
     private string? _mongoConnectionString;
 
@@ -31,6 +32,11 @@ public class RecipeBookApiFactory : WebApplicationFactory<IRecipeBookApiServiceM
 
         var appBuilder = DistributedApplication.CreateBuilder(options);
 
+        appBuilder.Services.ConfigureHttpClientDefaults(clientBuilder =>
+        {
+            clientBuilder.AddStandardResilienceHandler();
+        });
+
         _mongo = appBuilder.AddMongoDB("DefaultMongoDb")
             .WithImage("mongodb/mongodb-community-server")
             .WithImageTag("7.0.12-ubuntu2204")
@@ -41,6 +47,8 @@ public class RecipeBookApiFactory : WebApplicationFactory<IRecipeBookApiServiceM
             .WithBindMount(MongoInitScriptPath, "/docker-entrypoint-initdb.d/mongo-init.sh", true);
 
         _app = appBuilder.Build();
+
+        _resourceNotificationService = _app.Services.GetRequiredService<ResourceNotificationService>();
     }
 
     static RecipeBookApiFactory()
@@ -85,14 +93,15 @@ public class RecipeBookApiFactory : WebApplicationFactory<IRecipeBookApiServiceM
     public async Task InitializeAsync()
     {
         await _app.StartAsync();
-        _mongoConnectionString = await _mongo.Resource.ConnectionStringExpression
-            .GetValueAsync(new CancellationToken());
+        _mongoConnectionString = await _mongo.Resource
+            .ConnectionStringExpression.GetValueAsync(new CancellationToken());
+        await _resourceNotificationService.WaitForResourceAsync(_mongo.Resource.Name, KnownResourceStates.Running);
     }
 
     public new async Task DisposeAsync()
     {
-        await base.DisposeAsync();
         await _app.StopAsync();
+
         if (_app is IAsyncDisposable asyncDisposable)
         {
             await asyncDisposable.DisposeAsync().ConfigureAwait(false);
@@ -101,6 +110,8 @@ public class RecipeBookApiFactory : WebApplicationFactory<IRecipeBookApiServiceM
         {
             _app.Dispose();
         }
+
+        await base.DisposeAsync();
     }
 
     private static string GetEnvironmentVariableOrThrow(string variableName)
