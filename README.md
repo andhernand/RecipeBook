@@ -32,6 +32,8 @@ The environment variables that start with `RECIPE_BOOK_API` need to match the va
 
 ### Install Aspire, Restore, Build, and Run
 
+*NOTE:* Make sure Docker Desktop is running
+
 ```bash
 dotnet workload install aspire
 dotnet restore RecipeBook.sln
@@ -42,6 +44,8 @@ dotnet run --project src/RecipeBook.AppHost/RecipeBook.AppHost.csproj
 ### Running Tests
 
 Tests utilize [.NET Aspire](https://learn.microsoft.com/dotnet/aspire/) to orchestrate the creation of necessary dependencies for all tests. To run the tests, use the following command:
+
+*NOTE:* Make sure Docker Desktop is running
 
 ```bash
 dotnet test RecipeBook.sln
