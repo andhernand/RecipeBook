@@ -43,6 +43,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeBook.Contracts", "src\RecipeBook.Contracts\RecipeBook.Contracts.csproj", "{4D10F3BA-A08E-484D-B626-FEB5B241E0B4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4094BC24-B60D-467C-815D-4B7E635A8BBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeBook.ApiService.Tests", "test\RecipeBook.ApiService.Tests\RecipeBook.ApiService.Tests.csproj", "{C673EBEF-AD70-42C8-A04F-E6A2E3CEE575}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,10 @@ Global
 		{4D10F3BA-A08E-484D-B626-FEB5B241E0B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D10F3BA-A08E-484D-B626-FEB5B241E0B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D10F3BA-A08E-484D-B626-FEB5B241E0B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C673EBEF-AD70-42C8-A04F-E6A2E3CEE575}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C673EBEF-AD70-42C8-A04F-E6A2E3CEE575}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C673EBEF-AD70-42C8-A04F-E6A2E3CEE575}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C673EBEF-AD70-42C8-A04F-E6A2E3CEE575}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +88,7 @@ Global
 		{D82E28EE-8113-4279-9EB3-332F380A6F9A} = {2F81DFDB-BCEE-4E16-BE54-F87ACACE487B}
 		{C4068DC3-8063-4828-BB83-58AFBD4335B0} = {E38CFFDE-23CF-4FA2-AA9C-01A7394053A0}
 		{4D10F3BA-A08E-484D-B626-FEB5B241E0B4} = {2F81DFDB-BCEE-4E16-BE54-F87ACACE487B}
+		{C673EBEF-AD70-42C8-A04F-E6A2E3CEE575} = {4094BC24-B60D-467C-815D-4B7E635A8BBA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4681D4D0-E01B-434A-A043-4CFBDE59D048}
