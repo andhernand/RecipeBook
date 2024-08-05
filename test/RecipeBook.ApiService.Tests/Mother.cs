@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using RecipeBook.Contracts.Requests;
 using RecipeBook.Contracts.Responses;
-// ReSharper disable MemberCanBePrivate.Global
 
 namespace RecipeBook.ApiService.Tests;
 

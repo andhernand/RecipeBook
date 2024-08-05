@@ -8,7 +8,6 @@ using RecipeBook.AppHost;
 
 namespace RecipeBook.ApiService.Tests;
 
-// ReSharper disable once ClassNeverInstantiated.Global
 public class RecipeBookApiFactory : WebApplicationFactory<IRecipeBookApiServiceMarker>, IAsyncLifetime
 {
     private static readonly string ApiUsername;
