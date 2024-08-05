@@ -44,3 +44,6 @@ jobs:
 
       - name: Build the application
         run: dotnet build RecipeBook.sln --configuration Release --no-restore
+
+      - name: Test the application
+        run: dotnet test RecipeBook.sln --configuration Release --no-build --verbosity normal
