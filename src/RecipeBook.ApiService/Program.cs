@@ -12,14 +12,19 @@ var builder = WebApplication.CreateBuilder(args);
             "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Properties} {Message:lj}{NewLine}{Exception}")
         .WriteTo.OpenTelemetry(x =>
         {
-            x.Endpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
+            var otlpEndpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
 
-            var otelHeader = builder.Configuration["OTEL_EXPORTER_OTLP_HEADERS"]!.Split('=');
-            x.Headers = new Dictionary<string, string> { { otelHeader[0], otelHeader[1] } };
+            if (!string.IsNullOrWhiteSpace(otlpEndpoint))
+            {
+                x.Endpoint = otlpEndpoint;
 
-            x.Protocol = builder.Configuration["OTEL_EXPORTER_OTLP_PROTOCOL"] == "grpc"
-                ? OtlpProtocol.Grpc
-                : OtlpProtocol.HttpProtobuf;
+                var otelHeader = builder.Configuration["OTEL_EXPORTER_OTLP_HEADERS"]!.Split('=');
+                x.Headers = new Dictionary<string, string> { { otelHeader[0], otelHeader[1] } };
+
+                x.Protocol = builder.Configuration["OTEL_EXPORTER_OTLP_PROTOCOL"] == "grpc"
+                    ? OtlpProtocol.Grpc
+                    : OtlpProtocol.HttpProtobuf;
+            }
         })
         .Enrich.FromLogContext()
         .Enrich.WithEnvironmentName()
