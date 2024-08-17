@@ -36,7 +36,10 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4.0.1
         with:
-          dotnet-version: '8.x'
+          global-json-file: true
+
+      - name: Update Workloads
+        run: dotnet workload update
 
       - name: Install Aspire Workload
         run: dotnet workload install aspire
