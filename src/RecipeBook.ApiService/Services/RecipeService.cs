@@ -1,5 +1,4 @@
 ﻿using RecipeBook.ApiService.Mapping;
-using RecipeBook.ApiService.Models;
 using RecipeBook.ApiService.Repositories;
 using RecipeBook.Contracts.Requests;
 using RecipeBook.Contracts.Responses;
@@ -11,7 +10,7 @@ public interface IRecipeService
     Task<RecipeResponse> CreateRecipeAsync(CreateRecipeRequest request, CancellationToken token = default);
     Task<IEnumerable<RecipeResponse>> GetAllRecipesAsync(CancellationToken token = default);
     Task<RecipeResponse?> GetRecipeByIdAsync(string id, CancellationToken token = default);
-    Task<Recipe?> UpdateRecipeAsync(string id, Recipe update, CancellationToken token);
+    Task<RecipeResponse?> UpdateRecipeAsync(string id, UpdateRecipeRequest update, CancellationToken token = default);
     Task<bool> DeleteRecipeAsync(string id, CancellationToken token = default);
 }
 
@@ -43,9 +42,14 @@ public class RecipeService : IRecipeService
         return recipe?.MapToResponse();
     }
 
-    public Task<Recipe?> UpdateRecipeAsync(string id, Recipe update, CancellationToken token)
+    public async Task<RecipeResponse?> UpdateRecipeAsync(
+        string id,
+        UpdateRecipeRequest update,
+        CancellationToken token = default)
     {
-        return _repository.UpdateRecipeAsync(id, update, token);
+        var todo = update.MapToRecipe();
+        var updated = await _repository.UpdateRecipeAsync(id, todo, token);
+        return updated?.MapToResponse();
     }
 
     public async Task<bool> DeleteRecipeAsync(string id, CancellationToken token = default)
