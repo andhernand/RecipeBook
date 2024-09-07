@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
 
 using RecipeBook.ApiService.Filters;
 using RecipeBook.ApiService.Mapping;
@@ -14,34 +14,29 @@ public static class UpdateRecipeEndpoint
 
     public static void MapUpdateRecipe(this IEndpointRouteBuilder builder)
     {
-        builder.MapPut(ApiEndpoints.Recipes.Update, async (
-                string id,
-                UpdateRecipeRequest request,
-                IRecipeService service,
-                CancellationToken token) =>
-            {
-                var recipe = request.MapToRecipe();
-                recipe.Id = id;
-
-                var updated = await service.UpdateRecipeAsync(id, recipe, token);
-                if (updated is null)
+        builder.MapPut(ApiEndpoints.Recipes.Update,
+                async Task<Results<Ok<RecipeResponse>, NotFound, ValidationProblem>> (
+                    string id,
+                    UpdateRecipeRequest request,
+                    IRecipeService service,
+                    CancellationToken token) =>
                 {
-                    return Results.Problem(statusCode: StatusCodes.Status404NotFound);
-                }
+                    var recipe = request.MapToRecipe();
+                    recipe.Id = id;
 
-                var response = updated.MapToResponse();
-                return TypedResults.Ok(response);
-            })
+                    var updated = await service.UpdateRecipeAsync(id, recipe, token);
+                    if (updated is null)
+                    {
+                        return TypedResults.NotFound();
+                    }
+
+                    var response = updated.MapToResponse();
+                    return TypedResults.Ok(response);
+                })
             .WithName(Name)
             .WithTags(ApiEndpoints.Recipes.Tag)
             .Accepts<UpdateRecipeRequest>(isOptional: false, contentType: "application/json")
-            .AddEndpointFilter<ObjectIdFilter>()
-            .AddEndpointFilter<RecipeExistsFilter>()
             .AddEndpointFilter<RequestValidationFilter<UpdateRecipeRequest>>()
-            .Produces<RecipeResponse>(contentType: "application/json")
-            .Produces<ProblemDetails>(StatusCodes.Status404NotFound, contentType: "application/problem+json")
-            .Produces<ValidationProblemDetails>(
-                StatusCodes.Status400BadRequest,
-                contentType: "application/problem+json");
+            .WithOpenApi();
     }
 }

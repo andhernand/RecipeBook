@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
 
-using RecipeBook.ApiService.Filters;
 using RecipeBook.ApiService.Mapping;
 using RecipeBook.ApiService.Services;
 using RecipeBook.Contracts.Responses;
@@ -13,27 +12,23 @@ public static class GetRecipeByIdEndpoint
 
     public static void MapGetRecipeById(this IEndpointRouteBuilder builder)
     {
-        builder.MapGet(ApiEndpoints.Recipes.GetById, async (
-                string id,
-                IRecipeService service,
-                CancellationToken token) =>
-            {
-                var recipe = await service.GetRecipeByIdAsync(id, token);
-                if (recipe is null)
+        builder.MapGet(ApiEndpoints.Recipes.GetById,
+                async Task<Results<Ok<RecipeResponse>, NotFound>> (
+                    string id,
+                    IRecipeService service,
+                    CancellationToken token) =>
                 {
-                    return Results.Problem(statusCode: StatusCodes.Status404NotFound);
-                }
+                    var recipe = await service.GetRecipeByIdAsync(id, token);
+                    if (recipe is null)
+                    {
+                        return TypedResults.NotFound();
+                    }
 
-                var response = recipe.MapToResponse();
-                return TypedResults.Ok(response);
-            })
+                    var response = recipe.MapToResponse();
+                    return TypedResults.Ok(response);
+                })
             .WithName(Name)
             .WithTags(ApiEndpoints.Recipes.Tag)
-            .AddEndpointFilter<ObjectIdFilter>()
-            .Produces<RecipeResponse>(contentType: "application/json")
-            .ProducesProblem(StatusCodes.Status404NotFound)
-            .Produces<ValidationProblemDetails>(
-                StatusCodes.Status400BadRequest,
-                contentType: "application/problem+json");
+            .WithOpenApi();
     }
 }

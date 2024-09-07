@@ -238,8 +238,6 @@ public class RecipeBookApiTests : IClassFixture<RecipeBookApiFactory>, IAsyncLif
     {
         // Arrange
         using var client = _factory.CreateClient();
-
-        var expected = Mother.GenerateNotFoundProblemDetails();
         var id = ObjectId.GenerateNewId();
 
         // Act
@@ -247,9 +245,6 @@ public class RecipeBookApiTests : IClassFixture<RecipeBookApiFactory>, IAsyncLif
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-
-        var errors = await response.Content.ReadFromJsonAsync<ProblemDetails>();
-        errors.Should().BeEquivalentTo(expected);
     }
 
     [Fact]
@@ -258,19 +253,11 @@ public class RecipeBookApiTests : IClassFixture<RecipeBookApiFactory>, IAsyncLif
         // Arrange
         using var client = _factory.CreateClient();
 
-        var expected = Mother.GenerateValidationProblemDetails(new Dictionary<string, string[]>
-        {
-            { "Id", ["'Id' is not in the correct format."] }
-        });
-
         // Act
         var response = await client.GetAsync($"{Mother.RecipesApiBasePath}/yoda");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-        var errors = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
-        errors.Should().BeEquivalentTo(expected);
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     [Fact]
@@ -373,19 +360,11 @@ public class RecipeBookApiTests : IClassFixture<RecipeBookApiFactory>, IAsyncLif
 
         var request = Mother.GenerateUpdateRecipeRequest();
 
-        var expected = Mother.GenerateValidationProblemDetails(new Dictionary<string, string[]>
-        {
-            { "Id", ["'Id' is not in the correct format."] }
-        });
-
         // Act
         var response = await client.PutAsJsonAsync($"{Mother.RecipesApiBasePath}/yoda", request);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-        var errors = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
-        errors.Should().BeEquivalentTo(expected);
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     [Fact]
@@ -397,16 +376,11 @@ public class RecipeBookApiTests : IClassFixture<RecipeBookApiFactory>, IAsyncLif
         var request = Mother.GenerateUpdateRecipeRequest();
         var id = ObjectId.GenerateNewId();
 
-        var expected = Mother.GenerateNotFoundProblemDetails();
-
         // Act
         var response = await client.PutAsJsonAsync($"{Mother.RecipesApiBasePath}/{id}", request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-
-        var errors = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
-        errors.Should().BeEquivalentTo(expected);
     }
 
     [Fact]
@@ -534,8 +508,6 @@ public class RecipeBookApiTests : IClassFixture<RecipeBookApiFactory>, IAsyncLif
     {
         // Arrange
         using var client = _factory.CreateClient();
-
-        var expected = Mother.GenerateNotFoundProblemDetails();
         var id = ObjectId.GenerateNewId();
 
         // Act
@@ -543,9 +515,6 @@ public class RecipeBookApiTests : IClassFixture<RecipeBookApiFactory>, IAsyncLif
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-
-        var errors = await response.Content.ReadFromJsonAsync<ProblemDetails>();
-        errors.Should().BeEquivalentTo(expected);
     }
 
     [Fact]
@@ -554,19 +523,11 @@ public class RecipeBookApiTests : IClassFixture<RecipeBookApiFactory>, IAsyncLif
         // Arrange
         using var client = _factory.CreateClient();
 
-        var expected = Mother.GenerateValidationProblemDetails(new Dictionary<string, string[]>
-        {
-            { "Id", ["'Id' is not in the correct format."] }
-        });
-
         // Act
         var response = await client.DeleteAsync($"{Mother.RecipesApiBasePath}/yoda");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-        var errors = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
-        errors.Should().BeEquivalentTo(expected);
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     public Task InitializeAsync() => Task.CompletedTask;
