@@ -14,31 +14,24 @@ public interface IRecipeService
     Task<bool> DeleteRecipeAsync(string id, CancellationToken token = default);
 }
 
-public class RecipeService : IRecipeService
+public class RecipeService(IRecipeRepository repository) : IRecipeService
 {
-    private readonly IRecipeRepository _repository;
-
-    public RecipeService(IRecipeRepository repository)
-    {
-        _repository = repository;
-    }
-
     public async Task<RecipeResponse> CreateRecipeAsync(CreateRecipeRequest request, CancellationToken token = default)
     {
         var recipe = request.MapToRecipe();
-        await _repository.CreateRecipeAsync(recipe, token);
+        await repository.CreateRecipeAsync(recipe, token);
         return recipe.MapToResponse();
     }
 
     public async Task<IEnumerable<RecipeResponse>> GetAllRecipesAsync(CancellationToken token = default)
     {
-        var todos = await _repository.GetAllRecipesAsync(token);
+        var todos = await repository.GetAllRecipesAsync(token);
         return todos.MapToResponse();
     }
 
     public async Task<RecipeResponse?> GetRecipeByIdAsync(string id, CancellationToken token = default)
     {
-        var recipe = await _repository.GetRecipeByIdAsync(id, token);
+        var recipe = await repository.GetRecipeByIdAsync(id, token);
         return recipe?.MapToResponse();
     }
 
@@ -48,13 +41,13 @@ public class RecipeService : IRecipeService
         CancellationToken token = default)
     {
         var todo = update.MapToRecipe();
-        var updated = await _repository.UpdateRecipeAsync(id, todo, token);
+        var updated = await repository.UpdateRecipeAsync(id, todo, token);
         return updated?.MapToResponse();
     }
 
     public async Task<bool> DeleteRecipeAsync(string id, CancellationToken token = default)
     {
-        var recipe = await _repository.DeleteRecipeAsync(id, token);
+        var recipe = await repository.DeleteRecipeAsync(id, token);
         return recipe is not null;
     }
 }
