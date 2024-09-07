@@ -9,7 +9,7 @@ namespace RecipeBook.ApiService.Services;
 public interface IRecipeService
 {
     Task<RecipeResponse> CreateRecipeAsync(CreateRecipeRequest request, CancellationToken token = default);
-    Task<IEnumerable<Recipe>> GetAllRecipesAsync(CancellationToken token);
+    Task<IEnumerable<RecipeResponse>> GetAllRecipesAsync(CancellationToken token = default);
     Task<Recipe?> GetRecipeByIdAsync(string id, CancellationToken token);
     Task<Recipe?> UpdateRecipeAsync(string id, Recipe update, CancellationToken token);
     Task<bool> DeleteRecipeAsync(string id, CancellationToken token = default);
@@ -31,9 +31,10 @@ public class RecipeService : IRecipeService
         return recipe.MapToResponse();
     }
 
-    public Task<IEnumerable<Recipe>> GetAllRecipesAsync(CancellationToken token)
+    public async Task<IEnumerable<RecipeResponse>> GetAllRecipesAsync(CancellationToken token = default)
     {
-        return _repository.GetAllRecipesAsync(token);
+        var todos = await _repository.GetAllRecipesAsync(token);
+        return todos.MapToResponse();
     }
 
     public Task<Recipe?> GetRecipeByIdAsync(string id, CancellationToken token)
