@@ -39,7 +39,7 @@ public static class Mother
         IEnumerable<string>? directions = default)
     {
         var recipeFaker = new Faker<UpdateRecipeRequest>()
-            .RuleFor(x => x.Id, f => id ?? ObjectId.GenerateNewId().ToString())
+            .RuleFor(x => x.Id, _ => id ?? ObjectId.GenerateNewId().ToString())
             .RuleFor(x => x.Title, f => title ?? f.Lorem.Sentence(3))
             .RuleFor(x => x.Description, f => description ?? f.Lorem.Sentence(10))
             .RuleFor(x => x.Ingredients, f => ingredients ?? f.Make(6, () => f.Lorem.Sentence(3)))
