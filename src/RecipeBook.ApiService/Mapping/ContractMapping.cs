@@ -41,8 +41,8 @@ public static class ContractMapping
         };
     }
 
-    public static RecipesResponse MapToResponse(this IEnumerable<Recipe> recipes)
+    public static IEnumerable<RecipeResponse> MapToResponse(this IEnumerable<Recipe> recipes)
     {
-        return new RecipesResponse { Recipes = recipes.Select(MapToResponse) };
+        return recipes.Select(MapToResponse);
     }
 }

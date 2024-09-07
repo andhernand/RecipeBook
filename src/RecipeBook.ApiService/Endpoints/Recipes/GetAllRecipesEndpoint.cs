@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 
-using RecipeBook.ApiService.Mapping;
 using RecipeBook.ApiService.Services;
 using RecipeBook.Contracts.Responses;
 
@@ -13,13 +12,12 @@ public static class GetAllRecipesEndpoint
     public static void MapGetAllRecipes(this IEndpointRouteBuilder builder)
     {
         builder.MapGet(ApiEndpoints.Recipes.GetAll,
-                async Task<Ok<RecipesResponse>> (
+                async Task<Ok<IEnumerable<RecipeResponse>>> (
                     IRecipeService service,
                     CancellationToken token) =>
                 {
                     var recipes = await service.GetAllRecipesAsync(token);
-                    var response = recipes.MapToResponse();
-                    return TypedResults.Ok(response);
+                    return TypedResults.Ok(recipes);
                 })
             .WithName(Name)
             .WithTags(ApiEndpoints.Recipes.Tag)

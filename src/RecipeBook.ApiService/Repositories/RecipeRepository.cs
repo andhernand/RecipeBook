@@ -10,7 +10,7 @@ namespace RecipeBook.ApiService.Repositories;
 public interface IRecipeRepository
 {
     Task CreateRecipeAsync(Recipe recipe, CancellationToken token = default);
-    Task<IEnumerable<Recipe>> GetAllRecipesAsync(CancellationToken token);
+    Task<IEnumerable<Recipe>> GetAllRecipesAsync(CancellationToken token = default);
     Task<Recipe?> GetRecipeByIdAsync(string id, CancellationToken token);
     Task<Recipe?> UpdateRecipeAsync(string id, Recipe update, CancellationToken token);
     Task<Recipe?> DeleteRecipeAsync(string id, CancellationToken token = default);
@@ -50,7 +50,7 @@ public class RecipeRepository : IRecipeRepository
         }
     }
 
-    public async Task<IEnumerable<Recipe>> GetAllRecipesAsync(CancellationToken token)
+    public async Task<IEnumerable<Recipe>> GetAllRecipesAsync(CancellationToken token = default)
     {
         _logger.LogInformation("Getting all Recipes");
 
@@ -58,11 +58,11 @@ public class RecipeRepository : IRecipeRepository
         {
             token.ThrowIfCancellationRequested();
 
-            using var recipes = await _recipeCollection.FindAsync(
+            using var cursor = await _recipeCollection.FindAsync(
                 Builders<Recipe>.Filter.Empty,
                 cancellationToken: token);
 
-            var result = await recipes.ToListAsync(token);
+            var result = await cursor.ToListAsync(token);
             _logger.LogInformation("Fetched {Count} recipes", result.Count);
 
             return result;

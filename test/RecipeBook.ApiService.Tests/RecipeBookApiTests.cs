@@ -180,7 +180,7 @@ public class RecipeBookApiTests(RecipeBookApiFactory factory) : IClassFixture<Re
         _createdRecipeIds.Add(recipe1.Id);
         _createdRecipeIds.Add(recipe2.Id);
 
-        var expected = new RecipesResponse { Recipes = new[] { recipe1, recipe2 } };
+        var expected = new[] { recipe1, recipe2 };
 
         // Act
         var response = await client.GetAsync(Mother.RecipesApiBasePath);
@@ -188,7 +188,7 @@ public class RecipeBookApiTests(RecipeBookApiFactory factory) : IClassFixture<Re
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var recipes = await response.Content.ReadFromJsonAsync<RecipesResponse>();
+        var recipes = await response.Content.ReadFromJsonAsync<IEnumerable<RecipeResponse>>();
         recipes!.Should().BeEquivalentTo(expected);
     }
 
@@ -204,8 +204,8 @@ public class RecipeBookApiTests(RecipeBookApiFactory factory) : IClassFixture<Re
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var recipes = await response.Content.ReadFromJsonAsync<RecipesResponse>();
-        recipes!.Recipes.Should().BeEmpty();
+        var recipes = await response.Content.ReadFromJsonAsync<IEnumerable<RecipeResponse>>();
+        recipes.Should().BeEmpty();
     }
 
     [Fact]
