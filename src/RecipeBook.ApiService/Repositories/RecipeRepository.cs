@@ -9,7 +9,7 @@ namespace RecipeBook.ApiService.Repositories;
 
 public interface IRecipeRepository
 {
-    Task<Recipe> CreateRecipeAsync(Recipe recipe, CancellationToken token);
+    Task CreateRecipeAsync(Recipe recipe, CancellationToken token = default);
     Task<IEnumerable<Recipe>> GetAllRecipesAsync(CancellationToken token);
     Task<Recipe?> GetRecipeByIdAsync(string id, CancellationToken token);
     Task<Recipe?> UpdateRecipeAsync(string id, Recipe update, CancellationToken token);
@@ -32,9 +32,9 @@ public class RecipeRepository : IRecipeRepository
         _logger = logger;
     }
 
-    public async Task<Recipe> CreateRecipeAsync(Recipe recipe, CancellationToken token)
+    public async Task CreateRecipeAsync(Recipe recipe, CancellationToken token = default)
     {
-        _logger.LogInformation("Creating Recipe for {RecipeTitle}", recipe.Title);
+        _logger.LogInformation("Creating {RecipeTitle} Recipe", recipe.Title);
 
         try
         {
@@ -42,8 +42,6 @@ public class RecipeRepository : IRecipeRepository
 
             await _recipeCollection.InsertOneAsync(recipe, cancellationToken: token);
             _logger.LogInformation("Created Recipe {Id}", recipe.Id);
-
-            return recipe;
         }
         catch (Exception ex)
         {
