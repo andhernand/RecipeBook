@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 
 using RecipeBook.ApiService.Filters;
-using RecipeBook.ApiService.Mapping;
 using RecipeBook.ApiService.Services;
 using RecipeBook.Contracts.Requests;
 using RecipeBook.Contracts.Responses;
@@ -21,16 +20,11 @@ public static class UpdateRecipeEndpoint
                     IRecipeService service,
                     CancellationToken token) =>
                 {
-                    var recipe = request.MapToRecipe();
+                    var updated = await service.UpdateRecipeAsync(id, request, token);
 
-                    var updated = await service.UpdateRecipeAsync(id, recipe, token);
-                    if (updated is null)
-                    {
-                        return TypedResults.NotFound();
-                    }
-
-                    var response = updated.MapToResponse();
-                    return TypedResults.Ok(response);
+                    return updated is null
+                        ? TypedResults.NotFound()
+                        : TypedResults.Ok(updated);
                 })
             .WithName(Name)
             .WithTags(ApiEndpoints.Recipes.Tag)
