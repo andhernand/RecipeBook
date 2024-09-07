@@ -14,7 +14,6 @@ public interface IRecipeRepository
     Task<Recipe?> GetRecipeByIdAsync(string id, CancellationToken token = default);
     Task<Recipe?> UpdateRecipeAsync(string id, Recipe update, CancellationToken token = default);
     Task<Recipe?> DeleteRecipeAsync(string id, CancellationToken token = default);
-    Task<bool> ExistsById(string id, CancellationToken token);
 }
 
 public class RecipeRepository : IRecipeRepository
@@ -138,24 +137,6 @@ public class RecipeRepository : IRecipeRepository
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while deleting recipe {Id}", id);
-            throw;
-        }
-    }
-
-    public Task<bool> ExistsById(string id, CancellationToken token)
-    {
-        _logger.LogInformation("Checking if Recipe {Id} exists", id);
-
-        try
-        {
-            var count = _recipeCollection
-                .Find(Builders<Recipe>.Filter.Eq(r => r.Id, id))
-                .CountDocuments(token);
-            return Task.FromResult(count > 0);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while checking for the existence of recipe {Id}", id);
             throw;
         }
     }
