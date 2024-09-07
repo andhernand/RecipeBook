@@ -11,7 +11,7 @@ public interface IRecipeRepository
 {
     Task CreateRecipeAsync(Recipe recipe, CancellationToken token = default);
     Task<IEnumerable<Recipe>> GetAllRecipesAsync(CancellationToken token = default);
-    Task<Recipe?> GetRecipeByIdAsync(string id, CancellationToken token);
+    Task<Recipe?> GetRecipeByIdAsync(string id, CancellationToken token = default);
     Task<Recipe?> UpdateRecipeAsync(string id, Recipe update, CancellationToken token);
     Task<Recipe?> DeleteRecipeAsync(string id, CancellationToken token = default);
     Task<bool> ExistsById(string id, CancellationToken token);
@@ -74,7 +74,7 @@ public class RecipeRepository : IRecipeRepository
         }
     }
 
-    public async Task<Recipe?> GetRecipeByIdAsync(string id, CancellationToken token)
+    public async Task<Recipe?> GetRecipeByIdAsync(string id, CancellationToken token = default)
     {
         _logger.LogInformation("Getting Recipe {Id}", id);
 
@@ -82,11 +82,11 @@ public class RecipeRepository : IRecipeRepository
         {
             token.ThrowIfCancellationRequested();
 
-            using var recipe = await _recipeCollection.FindAsync(
+            using var cursor = await _recipeCollection.FindAsync(
                 Builders<Recipe>.Filter.Eq(r => r.Id, id),
                 cancellationToken: token);
 
-            var result = await recipe.FirstOrDefaultAsync(token);
+            var result = await cursor.FirstOrDefaultAsync(token);
             _logger.LogInformation("Recipe {Id} was found: {IsFound}", id, result is not null);
 
             return result;

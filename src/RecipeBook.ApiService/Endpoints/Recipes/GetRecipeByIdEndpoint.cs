@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 
-using RecipeBook.ApiService.Mapping;
 using RecipeBook.ApiService.Services;
 using RecipeBook.Contracts.Responses;
 
@@ -19,13 +18,10 @@ public static class GetRecipeByIdEndpoint
                     CancellationToken token) =>
                 {
                     var recipe = await service.GetRecipeByIdAsync(id, token);
-                    if (recipe is null)
-                    {
-                        return TypedResults.NotFound();
-                    }
 
-                    var response = recipe.MapToResponse();
-                    return TypedResults.Ok(response);
+                    return recipe is null
+                        ? TypedResults.NotFound()
+                        : TypedResults.Ok(recipe);
                 })
             .WithName(Name)
             .WithTags(ApiEndpoints.Recipes.Tag)
