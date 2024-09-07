@@ -2,9 +2,12 @@ using RecipeBook.ApiService;
 using RecipeBook.ServiceDefaults;
 
 using Serilog;
+using Serilog.Events;
 using Serilog.Sinks.OpenTelemetry;
 
 Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
     .WriteTo.Console(outputTemplate:
         "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Properties} {Message:lj}{NewLine}{Exception}")
     .Enrich.FromLogContext()
@@ -22,6 +25,8 @@ try
     var builder = WebApplication.CreateBuilder(args);
     {
         builder.Host.UseSerilog((context, configuration) => configuration
+            .MinimumLevel.Information()
+            .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
             .WriteTo.Console(outputTemplate:
                 "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Properties} {Message:lj}{NewLine}{Exception}")
             .WriteTo.OpenTelemetry(x =>
@@ -49,10 +54,11 @@ try
         );
 
         builder.AddServiceDefaults();
-        builder.AddRecipeBookDefaults();
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        builder.AddRecipeBookDefaults();
     }
 
     var app = builder.Build();
@@ -63,9 +69,9 @@ try
             app.UseSwaggerUI();
         }
 
+        app.MapDefaultEndpoints();
         app.UseSerilogRequestLogging();
         app.UseGlobalErrorHandling();
-        app.MapDefaultEndpoints();
         app.MapApiEndpoints();
     }
 
