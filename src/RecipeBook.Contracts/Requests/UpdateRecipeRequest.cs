@@ -2,6 +2,7 @@
 
 public record UpdateRecipeRequest
 {
+    public required string Id { get; set; } = string.Empty;
     public required string Title { get; init; }
     public required string Description { get; init; }
     public required IEnumerable<string> Ingredients { get; init; } = [];

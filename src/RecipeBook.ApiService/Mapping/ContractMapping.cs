@@ -21,6 +21,7 @@ public static class ContractMapping
     {
         return new Recipe
         {
+            Id = request.Id,
             Title = request.Title,
             Description = request.Description,
             Ingredients = request.Ingredients,
