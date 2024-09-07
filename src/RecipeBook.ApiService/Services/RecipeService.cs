@@ -10,7 +10,7 @@ public interface IRecipeService
 {
     Task<RecipeResponse> CreateRecipeAsync(CreateRecipeRequest request, CancellationToken token = default);
     Task<IEnumerable<RecipeResponse>> GetAllRecipesAsync(CancellationToken token = default);
-    Task<Recipe?> GetRecipeByIdAsync(string id, CancellationToken token);
+    Task<RecipeResponse?> GetRecipeByIdAsync(string id, CancellationToken token = default);
     Task<Recipe?> UpdateRecipeAsync(string id, Recipe update, CancellationToken token);
     Task<bool> DeleteRecipeAsync(string id, CancellationToken token = default);
 }
@@ -37,9 +37,10 @@ public class RecipeService : IRecipeService
         return todos.MapToResponse();
     }
 
-    public Task<Recipe?> GetRecipeByIdAsync(string id, CancellationToken token)
+    public async Task<RecipeResponse?> GetRecipeByIdAsync(string id, CancellationToken token = default)
     {
-        return _repository.GetRecipeByIdAsync(id, token);
+        var recipe = await _repository.GetRecipeByIdAsync(id, token);
+        return recipe?.MapToResponse();
     }
 
     public Task<Recipe?> UpdateRecipeAsync(string id, Recipe update, CancellationToken token)
