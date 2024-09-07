@@ -1,6 +1,6 @@
 ﻿namespace RecipeBook.Contracts.Responses;
 
-public class RecipesResponse
+public record RecipesResponse
 {
     public required IEnumerable<RecipeResponse> Recipes { get; init; } = [];
 }

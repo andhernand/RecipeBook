@@ -1,6 +1,6 @@
 ﻿namespace RecipeBook.Contracts.Requests;
 
-public class CreateRecipeRequest
+public record CreateRecipeRequest
 {
     public required string Title { get; init; }
     public required string Description { get; init; }

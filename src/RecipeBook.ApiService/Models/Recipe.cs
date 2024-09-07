@@ -5,11 +5,11 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace RecipeBook.ApiService.Models;
 
-public class Recipe
+public record Recipe
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; } = default!;
+    public string Id { get; set; } = string.Empty;
 
     [BsonElement("title")]
     [JsonPropertyName("title")]

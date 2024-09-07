@@ -1,6 +1,6 @@
 ﻿namespace RecipeBook.Contracts.Responses;
 
-public class RecipeResponse
+public record RecipeResponse
 {
     public required string Id { get; init; }
     public required string Title { get; init; }
