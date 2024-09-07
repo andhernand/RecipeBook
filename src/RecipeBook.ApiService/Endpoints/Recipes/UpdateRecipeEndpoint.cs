@@ -22,7 +22,6 @@ public static class UpdateRecipeEndpoint
                     CancellationToken token) =>
                 {
                     var recipe = request.MapToRecipe();
-                    recipe.Id = id;
 
                     var updated = await service.UpdateRecipeAsync(id, recipe, token);
                     if (updated is null)

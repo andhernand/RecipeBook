@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 
+using RecipeBook.ApiService.Regex;
 using RecipeBook.Contracts.Requests;
 
 namespace RecipeBook.ApiService.Validators;
@@ -8,6 +9,18 @@ public class UpdateRecipeRequestValidator : AbstractValidator<UpdateRecipeReques
 {
     public UpdateRecipeRequestValidator()
     {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .OverridePropertyName("Id")
+            .WithMessage("'Id' must not be empty")
+            .DependentRules(() =>
+            {
+                RuleFor(x => x.Id)
+                    .Must(ValidateObjectId)
+                    .OverridePropertyName("Id")
+                    .WithMessage("The provided 'Id' is not valid");
+            });
+
         RuleFor(x => x.Title)
             .NotEmpty();
 
@@ -27,5 +40,10 @@ public class UpdateRecipeRequestValidator : AbstractValidator<UpdateRecipeReques
         RuleForEach(x => x.Directions)
             .NotEmpty()
             .WithMessage("Direction at index {CollectionIndex} must not be empty.");
+    }
+
+    private static bool ValidateObjectId(string id)
+    {
+        return RegexPatterns.HexIdRegex().IsMatch(id);
     }
 }
