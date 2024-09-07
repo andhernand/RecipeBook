@@ -15,7 +15,7 @@ var db = builder.AddMongoDB("DefaultMongoDb")
     .WithBindMount("../../db/mongo-init.sh", "/docker-entrypoint-initdb.d/mongo-init.sh", true)
     .WithMongoExpress(x => x.WithImage("mongo-express", "1.0.2-20-alpine3.19"));
 
-var cache = builder.AddRedis("cache").WithImage("redis", "7.4");
+var cache = builder.AddRedis("cache").WithImage("redis", "7.4.0");
 
 var apiService = builder.AddProject<Projects.RecipeBook_ApiService>("recipe-book-api")
     .WithReference(db);
