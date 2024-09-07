@@ -13,7 +13,7 @@ public interface IRecipeRepository
     Task<IEnumerable<Recipe>> GetAllRecipesAsync(CancellationToken token);
     Task<Recipe?> GetRecipeByIdAsync(string id, CancellationToken token);
     Task<Recipe?> UpdateRecipeAsync(string id, Recipe update, CancellationToken token);
-    Task<Recipe?> DeleteRecipeAsync(string id, CancellationToken token);
+    Task<Recipe?> DeleteRecipeAsync(string id, CancellationToken token = default);
     Task<bool> ExistsById(string id, CancellationToken token);
 }
 
@@ -120,7 +120,7 @@ public class RecipeRepository : IRecipeRepository
         }
     }
 
-    public async Task<Recipe?> DeleteRecipeAsync(string id, CancellationToken token)
+    public async Task<Recipe?> DeleteRecipeAsync(string id, CancellationToken token = default)
     {
         _logger.LogInformation("Deleting Recipe {Id}", id);
 
