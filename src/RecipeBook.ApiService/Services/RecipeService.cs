@@ -1,11 +1,14 @@
-﻿using RecipeBook.ApiService.Models;
+﻿using RecipeBook.ApiService.Mapping;
+using RecipeBook.ApiService.Models;
 using RecipeBook.ApiService.Repositories;
+using RecipeBook.Contracts.Requests;
+using RecipeBook.Contracts.Responses;
 
 namespace RecipeBook.ApiService.Services;
 
 public interface IRecipeService
 {
-    Task<Recipe> CreateRecipeAsync(Recipe recipe, CancellationToken token);
+    Task<RecipeResponse> CreateRecipeAsync(CreateRecipeRequest request, CancellationToken token = default);
     Task<IEnumerable<Recipe>> GetAllRecipesAsync(CancellationToken token);
     Task<Recipe?> GetRecipeByIdAsync(string id, CancellationToken token);
     Task<Recipe?> UpdateRecipeAsync(string id, Recipe update, CancellationToken token);
@@ -21,9 +24,11 @@ public class RecipeService : IRecipeService
         _repository = repository;
     }
 
-    public Task<Recipe> CreateRecipeAsync(Recipe recipe, CancellationToken token)
+    public async Task<RecipeResponse> CreateRecipeAsync(CreateRecipeRequest request, CancellationToken token = default)
     {
-        return _repository.CreateRecipeAsync(recipe, token);
+        var recipe = request.MapToRecipe();
+        await _repository.CreateRecipeAsync(recipe, token);
+        return recipe.MapToResponse();
     }
 
     public Task<IEnumerable<Recipe>> GetAllRecipesAsync(CancellationToken token)

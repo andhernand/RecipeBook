@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 
 using RecipeBook.ApiService.Filters;
-using RecipeBook.ApiService.Mapping;
 using RecipeBook.ApiService.Services;
 using RecipeBook.Contracts.Requests;
 using RecipeBook.Contracts.Responses;
@@ -20,14 +19,12 @@ public static class CreateRecipeEndpoint
                     IRecipeService service,
                     CancellationToken token) =>
                 {
-                    var recipe = request.MapToRecipe();
-                    var created = await service.CreateRecipeAsync(recipe, token);
-                    var response = created.MapToResponse();
+                    var recipe = await service.CreateRecipeAsync(request, token);
 
                     return TypedResults.CreatedAtRoute(
-                        response,
+                        recipe,
                         GetRecipeByIdEndpoint.Name,
-                        new { id = created.Id });
+                        new { id = recipe.Id });
                 })
             .WithName(Name)
             .WithTags(ApiEndpoints.Recipes.Tag)
