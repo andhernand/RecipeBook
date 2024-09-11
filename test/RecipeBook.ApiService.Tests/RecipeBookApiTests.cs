@@ -453,6 +453,24 @@ public class RecipeBookApiTests(RecipeBookApiFactory factory) : IClassFixture<Re
     }
 
     [Fact]
+    public async Task UpdateRecipe_WhenRepipeIdDoesNotMatch_ShouldReturnNotFound()
+    {
+        // Arrange
+        var created = await Mother.CreateRecipeAsync(_client);
+        _createdRecipeIds.Add(created.Id);
+        var differentId = ObjectId.GenerateNewId();
+
+        var request = Mother.GenerateUpdateRecipeRequest(
+            created.Id, created.Title, created.Description, ["clean", "eat"], ["wash", "cook"]);
+
+        // Act
+        var response = await _client.PutAsJsonAsync($"{Mother.RecipesApiBasePath}/{differentId}", request);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
     public async Task DeleteRecipe_WhenRecipeExists_ShouldReturnNoContent()
     {
         // Arrange
