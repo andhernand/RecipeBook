@@ -19,7 +19,7 @@ public static class CreateRecipeEndpoint
                     IRecipeService service,
                     CancellationToken token) =>
                 {
-                    var recipe = await service.CreateRecipeAsync(request, token);
+                    var recipe = await service.CreateAsync(request, token);
 
                     return TypedResults.CreatedAtRoute(
                         recipe,

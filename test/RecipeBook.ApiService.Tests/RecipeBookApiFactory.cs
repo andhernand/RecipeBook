@@ -73,14 +73,13 @@ public class RecipeBookApiFactory : WebApplicationFactory<IRecipeBookApiServiceM
     {
         builder.ConfigureHostConfiguration(config =>
         {
-            config.AddInMemoryCollection(new KeyValuePair<string, string?>[]
-            {
+            config.AddInMemoryCollection([
                 new($"ConnectionStrings:{_mongo.Resource.Name}", _mongoConnectionString),
                 new("DatabaseOptions:DatabaseName", ApiDatabase),
                 new("DatabaseOptions:CollectionName", ApiCollection),
                 new("DatabaseOptions:Username", ApiUsername),
                 new("DatabaseOptions:Password", ApiPassword)
-            });
+            ]);
         });
 
         return base.CreateHost(builder);

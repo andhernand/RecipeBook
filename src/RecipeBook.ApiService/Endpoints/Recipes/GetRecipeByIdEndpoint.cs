@@ -17,7 +17,7 @@ public static class GetRecipeByIdEndpoint
                     IRecipeService service,
                     CancellationToken token) =>
                 {
-                    var recipe = await service.GetRecipeByIdAsync(id, token);
+                    var recipe = await service.GetByIdAsync(id, token);
 
                     return recipe is null
                         ? TypedResults.NotFound()

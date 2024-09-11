@@ -20,7 +20,7 @@ public static class UpdateRecipeEndpoint
                     IRecipeService service,
                     CancellationToken token) =>
                 {
-                    var updated = await service.UpdateRecipeAsync(id, request, token);
+                    var updated = await service.UpdateAsync(id, request, token);
 
                     return updated is null
                         ? TypedResults.NotFound()

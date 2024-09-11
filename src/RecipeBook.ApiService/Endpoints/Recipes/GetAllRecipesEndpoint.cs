@@ -16,7 +16,7 @@ public static class GetAllRecipesEndpoint
                     IRecipeService service,
                     CancellationToken token) =>
                 {
-                    var recipes = await service.GetAllRecipesAsync(token);
+                    var recipes = await service.GetAllAsync(token);
                     return TypedResults.Ok(recipes);
                 })
             .WithName(Name)
