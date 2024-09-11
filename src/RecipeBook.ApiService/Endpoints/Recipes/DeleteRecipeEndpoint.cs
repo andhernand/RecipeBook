@@ -16,7 +16,7 @@ public static class DeleteRecipeEndpoint
                     IRecipeService service,
                     CancellationToken token) =>
                 {
-                    var deleted = await service.DeleteRecipeAsync(id, token);
+                    var deleted = await service.DeleteAsync(id, token);
 
                     return deleted
                         ? TypedResults.NoContent()

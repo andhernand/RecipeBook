@@ -9,7 +9,7 @@ public record Recipe
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; } = string.Empty;
+    public string Id { get; init; } = string.Empty;
 
     [BsonElement("title")]
     [JsonPropertyName("title")]

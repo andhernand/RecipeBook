@@ -9,11 +9,11 @@ namespace RecipeBook.ApiService.Repositories;
 
 public interface IRecipeRepository
 {
-    Task CreateRecipeAsync(Recipe recipe, CancellationToken token = default);
-    Task<IEnumerable<Recipe>> GetAllRecipesAsync(CancellationToken token = default);
-    Task<Recipe?> GetRecipeByIdAsync(string id, CancellationToken token = default);
-    Task<Recipe?> UpdateRecipeAsync(string id, Recipe update, CancellationToken token = default);
-    Task<Recipe?> DeleteRecipeAsync(string id, CancellationToken token = default);
+    Task CreateAsync(Recipe recipe, CancellationToken token = default);
+    Task<IEnumerable<Recipe>> GetAllAsync(CancellationToken token = default);
+    Task<Recipe?> GetByIdAsync(string id, CancellationToken token = default);
+    Task<Recipe?> UpdateAsync(string id, Recipe update, CancellationToken token = default);
+    Task<Recipe?> DeleteAsync(string id, CancellationToken token = default);
 }
 
 public class RecipeRepository : IRecipeRepository
@@ -31,113 +31,52 @@ public class RecipeRepository : IRecipeRepository
         _logger = logger;
     }
 
-    public async Task CreateRecipeAsync(Recipe recipe, CancellationToken token = default)
+    public async Task CreateAsync(Recipe recipe, CancellationToken token = default)
     {
         _logger.LogInformation("Creating {RecipeTitle} Recipe", recipe.Title);
 
-        try
-        {
-            token.ThrowIfCancellationRequested();
-
-            await _recipeCollection.InsertOneAsync(recipe, cancellationToken: token);
-            _logger.LogInformation("Created Recipe {Id}", recipe.Id);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while creating a recipe for {RecipeTitle}", recipe.Title);
-            throw;
-        }
+        await _recipeCollection.InsertOneAsync(recipe, cancellationToken: token);
     }
 
-    public async Task<IEnumerable<Recipe>> GetAllRecipesAsync(CancellationToken token = default)
+    public async Task<IEnumerable<Recipe>> GetAllAsync(CancellationToken token = default)
     {
         _logger.LogInformation("Getting all Recipes");
 
-        try
-        {
-            token.ThrowIfCancellationRequested();
+        using var cursor = await _recipeCollection.FindAsync(
+            Builders<Recipe>.Filter.Empty,
+            cancellationToken: token);
 
-            using var cursor = await _recipeCollection.FindAsync(
-                Builders<Recipe>.Filter.Empty,
-                cancellationToken: token);
-
-            var result = await cursor.ToListAsync(token);
-            _logger.LogInformation("Fetched {Count} recipes", result.Count);
-
-            return result;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while getting all recipes");
-            throw;
-        }
+        return await cursor.ToListAsync(token);
     }
 
-    public async Task<Recipe?> GetRecipeByIdAsync(string id, CancellationToken token = default)
+    public async Task<Recipe?> GetByIdAsync(string id, CancellationToken token = default)
     {
         _logger.LogInformation("Getting Recipe {Id}", id);
 
-        try
-        {
-            token.ThrowIfCancellationRequested();
+        using var cursor = await _recipeCollection.FindAsync(
+            Builders<Recipe>.Filter.Eq(r => r.Id, id),
+            cancellationToken: token);
 
-            using var cursor = await _recipeCollection.FindAsync(
-                Builders<Recipe>.Filter.Eq(r => r.Id, id),
-                cancellationToken: token);
-
-            var result = await cursor.FirstOrDefaultAsync(token);
-            _logger.LogInformation("Recipe {Id} was found: {IsFound}", id, result is not null);
-
-            return result;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while getting recipe {Id}", id);
-            throw;
-        }
+        return await cursor.FirstOrDefaultAsync(token);
     }
 
-    public async Task<Recipe?> UpdateRecipeAsync(string id, Recipe update, CancellationToken token = default)
+    public async Task<Recipe?> UpdateAsync(string id, Recipe update, CancellationToken token = default)
     {
         _logger.LogInformation("Updating Recipe {Id}", id);
 
-        try
-        {
-            var result = await _recipeCollection.FindOneAndReplaceAsync(
-                Builders<Recipe>.Filter.Eq(r => r.Id, id),
-                update,
-                new FindOneAndReplaceOptions<Recipe> { ReturnDocument = ReturnDocument.After },
-                cancellationToken: token);
-
-            _logger.LogInformation("Updated Recipe {Id}: {WasUpdated}", id, result is not null);
-            return result;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while updating recipe {Id}", id);
-            throw;
-        }
+        return await _recipeCollection.FindOneAndReplaceAsync(
+            Builders<Recipe>.Filter.Eq(r => r.Id, id),
+            update,
+            new FindOneAndReplaceOptions<Recipe> { ReturnDocument = ReturnDocument.After },
+            cancellationToken: token);
     }
 
-    public async Task<Recipe?> DeleteRecipeAsync(string id, CancellationToken token = default)
+    public async Task<Recipe?> DeleteAsync(string id, CancellationToken token = default)
     {
         _logger.LogInformation("Deleting Recipe {Id}", id);
 
-        try
-        {
-            token.ThrowIfCancellationRequested();
-
-            var result = await _recipeCollection.FindOneAndDeleteAsync(
-                Builders<Recipe>.Filter.Eq(r => r.Id, id),
-                cancellationToken: token);
-
-            _logger.LogInformation("Deleted Recipe {Id}: {IsDeleted}", id, result is not null);
-            return result;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while deleting recipe {Id}", id);
-            throw;
-        }
+        return await _recipeCollection.FindOneAndDeleteAsync(
+            Builders<Recipe>.Filter.Eq(r => r.Id, id),
+            cancellationToken: token);
     }
 }
