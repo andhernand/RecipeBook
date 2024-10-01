@@ -12,7 +12,7 @@ public interface IRecipeRepository
     Task CreateAsync(Recipe recipe, CancellationToken token = default);
     Task<IEnumerable<Recipe>> GetAllAsync(CancellationToken token = default);
     Task<Recipe?> GetByIdAsync(string id, CancellationToken token = default);
-    Task<Recipe?> UpdateAsync(string id, Recipe update, CancellationToken token = default);
+    Task<Recipe?> UpdateAsync(Recipe update, CancellationToken token = default);
     Task<Recipe?> DeleteAsync(string id, CancellationToken token = default);
 }
 
@@ -60,12 +60,12 @@ public class RecipeRepository : IRecipeRepository
         return await cursor.FirstOrDefaultAsync(token);
     }
 
-    public async Task<Recipe?> UpdateAsync(string id, Recipe update, CancellationToken token = default)
+    public async Task<Recipe?> UpdateAsync(Recipe update, CancellationToken token = default)
     {
-        _logger.LogInformation("Updating Recipe {Id}", id);
+        _logger.LogInformation("Updating Recipe {Id}", update.Id);
 
         return await _recipeCollection.FindOneAndReplaceAsync(
-            Builders<Recipe>.Filter.Eq(r => r.Id, id),
+            Builders<Recipe>.Filter.Eq(r => r.Id, update.Id),
             update,
             new FindOneAndReplaceOptions<Recipe> { ReturnDocument = ReturnDocument.After },
             cancellationToken: token);

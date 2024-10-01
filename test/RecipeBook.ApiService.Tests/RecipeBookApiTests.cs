@@ -254,7 +254,7 @@ public class RecipeBookApiTests(RecipeBookApiFactory factory) : IClassFixture<Re
         };
 
         // Act
-        var response = await _client.PutAsJsonAsync($"{Mother.RecipesApiBasePath}/{inserted.Id}", request);
+        var response = await _client.PutAsJsonAsync(Mother.RecipesApiBasePath, request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -289,7 +289,7 @@ public class RecipeBookApiTests(RecipeBookApiFactory factory) : IClassFixture<Re
         });
 
         // Act
-        var response = await _client.PutAsJsonAsync($"{Mother.RecipesApiBasePath}/{inserted.Id}", request);
+        var response = await _client.PutAsJsonAsync(Mother.RecipesApiBasePath, request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -320,7 +320,7 @@ public class RecipeBookApiTests(RecipeBookApiFactory factory) : IClassFixture<Re
         });
 
         // Act
-        var response = await _client.PutAsJsonAsync($"{Mother.RecipesApiBasePath}/{inserted.Id}", request);
+        var response = await _client.PutAsJsonAsync(Mother.RecipesApiBasePath, request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -336,7 +336,7 @@ public class RecipeBookApiTests(RecipeBookApiFactory factory) : IClassFixture<Re
         var request = Mother.GenerateUpdateRecipeRequest();
 
         // Act
-        var response = await _client.PutAsJsonAsync($"{Mother.RecipesApiBasePath}/yoda", request);
+        var response = await _client.PutAsJsonAsync(Mother.RecipesApiBasePath, request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -350,7 +350,7 @@ public class RecipeBookApiTests(RecipeBookApiFactory factory) : IClassFixture<Re
         var request = Mother.GenerateUpdateRecipeRequest(id: id.ToString());
 
         // Act
-        var response = await _client.PutAsJsonAsync($"{Mother.RecipesApiBasePath}/{id}", request);
+        var response = await _client.PutAsJsonAsync(Mother.RecipesApiBasePath, request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -371,7 +371,7 @@ public class RecipeBookApiTests(RecipeBookApiFactory factory) : IClassFixture<Re
         var request = Mother.GenerateUpdateRecipeRequest(id: created.Id, ingredients: []);
 
         // Act
-        var response = await _client.PutAsJsonAsync($"{Mother.RecipesApiBasePath}/{created.Id}", request);
+        var response = await _client.PutAsJsonAsync(Mother.RecipesApiBasePath, request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -395,7 +395,7 @@ public class RecipeBookApiTests(RecipeBookApiFactory factory) : IClassFixture<Re
         var request = Mother.GenerateUpdateRecipeRequest(id: created.Id, ingredients: ["oregano", "garlic", ""]);
 
         // Act
-        var response = await _client.PutAsJsonAsync($"{Mother.RecipesApiBasePath}/{created.Id}", request);
+        var response = await _client.PutAsJsonAsync(Mother.RecipesApiBasePath, request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -419,7 +419,7 @@ public class RecipeBookApiTests(RecipeBookApiFactory factory) : IClassFixture<Re
         var request = Mother.GenerateUpdateRecipeRequest(id: created.Id, directions: []);
 
         // Act
-        var response = await _client.PutAsJsonAsync($"{Mother.RecipesApiBasePath}/{created.Id}", request);
+        var response = await _client.PutAsJsonAsync(Mother.RecipesApiBasePath, request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -443,7 +443,7 @@ public class RecipeBookApiTests(RecipeBookApiFactory factory) : IClassFixture<Re
         var request = Mother.GenerateUpdateRecipeRequest(id: created.Id, directions: ["mix things", "", "cook things"]);
 
         // Act
-        var response = await _client.PutAsJsonAsync($"{Mother.RecipesApiBasePath}/{created.Id}", request);
+        var response = await _client.PutAsJsonAsync(Mother.RecipesApiBasePath, request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -461,10 +461,10 @@ public class RecipeBookApiTests(RecipeBookApiFactory factory) : IClassFixture<Re
         var differentId = ObjectId.GenerateNewId();
 
         var request = Mother.GenerateUpdateRecipeRequest(
-            created.Id, created.Title, created.Description, ["clean", "eat"], ["wash", "cook"]);
+            differentId.ToString(), created.Title, created.Description, ["clean", "eat"], ["wash", "cook"]);
 
         // Act
-        var response = await _client.PutAsJsonAsync($"{Mother.RecipesApiBasePath}/{differentId}", request);
+        var response = await _client.PutAsJsonAsync(Mother.RecipesApiBasePath, request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
