@@ -15,12 +15,11 @@ public static class UpdateRecipeEndpoint
     {
         builder.MapPut(ApiEndpoints.Recipes.Update,
                 async Task<Results<Ok<RecipeResponse>, NotFound, ValidationProblem>> (
-                    string id,
                     UpdateRecipeRequest request,
                     IRecipeService service,
                     CancellationToken token) =>
                 {
-                    var updated = await service.UpdateAsync(id, request, token);
+                    var updated = await service.UpdateAsync(request, token);
 
                     return updated is null
                         ? TypedResults.NotFound()
